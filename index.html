@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title>Newburgh Zoning</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.51.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.51.0/mapbox-gl.css' rel='stylesheet' />
+    <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.3.0/mapbox-gl-geocoder.min.js'></script>
+    <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.3.0/mapbox-gl-geocoder.css' type='text/css' />
+    
+    <style>
+        body { margin:0; padding:0; }
+        #map { position:absolute; top:0; bottom:0; width:100%; margin-top: 46px;}
+         nav {
+                height: 46px;
+                line-height: 46px;
+                background-color: #006400;                 
+             }
+        ut:not([type]), input[type=text]:not(.browser-default), input[type=password]:not(.browser-default), input[type=email]:not(.browser-default), input[type=url]:not(.browser-default), input[type=time]:not(.browser-default), input[type=date]:not(.browser-default), input[type=datetime]:not(.browser-default), input[type=datetime-local]:not(.browser-default), input[type=tel]:not(.browser-default), input[type=number]:not(.browser-default), input[type=search]:not(.browser-default), textarea.materialize-textarea {
+                -webkit-box-sizing: inherit !important; 
+            }
+        nav .brand-logo {
+            font-size: 23px;
+        }
+        .search {
+                  position: absolute;
+                  top: 165px;
+                  left: 10px;      
+                  background-color:rgba(255,255,255);
+                  margin-left:0;
+                  border-radius:4px 4px 4px;
+                  box-shadow: 0px 0px 0px 2px rgba(0, 0, 0, 0.1);       
+                  width:30px;
+                  height:30px;
+                  background-repeat: no-repeat;
+                  background-position: center;
+                  background-image: url('home.svg') ; 
+                  background-size: 20px 20px;  
+                  z-index: 3;    
+                  cursor: pointer;    
+
+                }
+        .search:hover {
+                        background-color:rgba(220,220,220, 1);          
+        }
+    </style>
+</head>
+<body>
+ <div class="navbar-fixed">
+    <nav>
+      <div class="nav-wrapper">
+        <a href="#!" class="brand-logo">Newburgh Zoning</a>
+        <ul class="right hide-on-med-and-down">
+          <li><a href="sass.html">Info</a></li>
+          <li><a href="badges.html">Components</a></li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+<div id='search-btn' class='search'></div>     
+<div id='map'></div>
+<script>
+mapboxgl.accessToken = 'pk.eyJ1IjoicmNvd2xpbmciLCJhIjoiY2lzZ2YwcjZtMDFwdzNvcnQ3bmR3NXFhcCJ9.TI01a_YqNaqKWigFu70x7w';
+var map = new mapboxgl.Map({
+    container: 'map', // container id
+    style: 'mapbox://styles/mapbox/streets-v9', // stylesheet location
+    center: [-74.0104, 41.5034], // starting position [lng, lat]
+    zoom: 13 // starting zoom
+});
+    
+// Clicking on the search button returns map to center
+$('#search-btn').click(function(){
+     map.jumpTo({center: [-74.0104, 41.5034]}); 
+}); 
+// Add zoom and rotation controls to the map.
+map.addControl(new mapboxgl.NavigationControl(), 'top-left');
+
+// Add a scale bar
+map.addControl(new mapboxgl.ScaleControl({position: 'bottom-right', unit: 'imperial'}));
+    
+// Add a geocoder to the map
+map.addControl(new MapboxGeocoder({
+    accessToken: mapboxgl.accessToken,
+    bbox: [-74.048637,41.487213,-73.997482,41.519207], // limit the geocoder to Newburgh, NY
+    placeholder: 'Enter an address'
+}));    
+    
+// Setup variables to load goejson files to the map    
+var url_bc = 'broadwaycorr.geojson';
+var url_colterr = 'colonialterr.geojson';
+var url_comdist = 'comdistoverlayer.geojson';
+var url_hdr	= 'hdr.geojson';
+var url_historic = 'historic.geojson';    
+var url_industrial = 'industryzone.geojson';
+var url_mdr	= 'mdr.geojson';
+var url_mixeduse = 'mixeduse.geojson';
+var url_neighborhoodcom = 'neighborhoodcom.geojson';    
+var url_waterfont = 'waterfrontoverlayer.geojson'; 
+    
+map.on('load', function () {
+    map.addSource('source_mixeduse', { type: 'geojson', data: url_mixeduse });
+	
+	map.addLayer({
+		"id": "mixeduse-line",
+		"type": "line",
+		"source": "source_mixeduse",
+	   'layout': {
+			'visibility': 'visible'
+		},
+		paint: {
+			'line-color': 'black',
+			'line-width': .5,			
+		}
+	});
+    
+    map.addLayer({
+		"id": "mixeduse-fill",
+		"type": "fill",
+		"source": "source_mixeduse",
+	   'layout': {
+			'visibility': 'visible'
+		},
+		paint: {
+			'fill-color': 'green',
+			'fill-opacity': .5,			
+		}
+	});
+    
+    map.addSource('source_bc', { type: 'geojson', data: url_bc });
+	
+	map.addLayer({
+		"id": "bc-line",
+		"type": "line",
+		"source": "source_bc",
+	   'layout': {
+			'visibility': 'visible'
+		},
+		paint: {
+			'line-color': 'black',
+			'line-width': .5,			
+		}
+	});
+    
+    map.addLayer({
+		"id": "bc-fill",
+		"type": "fill",
+		"source": "source_bc",
+	   'layout': {
+			'visibility': 'visible'
+		},
+		paint: {
+			'fill-color': 'blue',
+			'fill-opacity': .5,			
+		}
+	});
+    
+    map.addSource('source_hdr', { type: 'geojson', data: url_hdr });
+	
+	map.addLayer({
+		"id": "hdr-line",
+		"type": "line",
+		"source": "source_hdr",
+	   'layout': {
+			'visibility': 'visible'
+		},
+		paint: {
+			'line-color': 'black',
+			'line-width': .5,			
+		}
+	});
+    
+    map.addLayer({
+		"id": "hdr-fill",
+		"type": "fill",
+		"source": "source_hdr",
+	   'layout': {
+			'visibility': 'visible'
+		},
+		paint: {
+			'fill-color': 'brown',
+			'fill-opacity': .5,			
+		}
+	});
+    
+    map.addSource('source_mdr', { type: 'geojson', data: url_mdr });
+	
+	map.addLayer({
+		"id": "mdr-line",
+		"type": "line",
+		"source": "source_mdr",
+	   'layout': {
+			'visibility': 'visible'
+		},
+		paint: {
+			'line-color': 'black',
+			'line-width': 1,			
+		}
+	});
+    
+    map.addLayer({
+		"id": "mdr-fill",
+		"type": "fill",
+		"source": "source_mdr",
+	   'layout': {
+			'visibility': 'visible'
+		},
+		paint: {
+			'fill-color': 'yellow',
+			'fill-opacity': .5,			
+		}
+	});
+    
+    map.addSource('source_colter', { type: 'geojson', data: url_colterr });
+	
+	map.addLayer({
+		"id": "colter-line",
+		"type": "line",
+		"source": "source_colter",
+	   'layout': {
+			'visibility': 'visible'
+		},
+		paint: {
+			'line-color': 'black',
+			'line-width': 1,			
+		}
+	});
+    
+    map.addLayer({
+		"id": "colter-fill",
+		"type": "fill",
+		"source": "source_colter",
+	   'layout': {
+			'visibility': 'visible'
+		},
+		paint: {
+			'fill-color': 'purple',
+			'fill-opacity': .5,			
+		}
+	});
+    
+    map.addSource('source_comdist', { type: 'geojson', data: url_comdist });
+	
+	map.addLayer({
+		"id": "comdist-line",
+		"type": "line",
+		"source": "source_comdist",
+	   'layout': {
+			'visibility': 'visible'
+		},
+		paint: {
+			'line-color': 'black',
+			'line-width': 1,			
+		}
+	});
+    
+    map.addLayer({
+		"id": "comdist-fill",
+		"type": "fill",
+		"source": "source_comdist",
+	   'layout': {
+			'visibility': 'visible'
+		},
+		paint: {
+			'fill-color': 'white',
+			'fill-opacity': .5,			
+		}
+	});
+    
+    map.addSource('source_ind', { type: 'geojson', data: url_industrial });
+	
+	map.addLayer({
+		"id": "ind-line",
+		"type": "line",
+		"source": "source_ind",
+	   'layout': {
+			'visibility': 'visible'
+		},
+		paint: {
+			'line-color': 'black',
+			'line-width': 1,			
+		}
+	});
+    
+    map.addLayer({
+		"id": "ind-fill",
+		"type": "fill",
+		"source": "source_ind",
+	   'layout': {
+			'visibility': 'visible'
+		},
+		paint: {
+			'fill-color': 'aqua',
+			'fill-opacity': .5,			
+		}
+	});
+    
+    map.addSource('source_hist', { type: 'geojson', data: url_historic });
+	
+	map.addLayer({
+		"id": "hist-line",
+		"type": "line",
+		"source": "source_hist",
+	   'layout': {
+			'visibility': 'visible'
+		},
+		paint: {
+			'line-color': 'black',
+			'line-width': 1,			
+		}
+	});
+    
+    map.addLayer({
+		"id": "hist-fill",
+		"type": "fill",
+		"source": "source_hist",
+	   'layout': {
+			'visibility': 'visible'
+		},
+		paint: {
+			'fill-color': 'pink',
+			'fill-opacity': .5,			
+		}
+	});
+    
+    map.addSource('source_nc', { type: 'geojson', data: url_neighborhoodcom });
+	
+	map.addLayer({
+		"id": "nc-line",
+		"type": "line",
+		"source": "source_nc",
+	   'layout': {
+			'visibility': 'visible'
+		},
+		paint: {
+			'line-color': 'black',
+			'line-width': 1,			
+		}
+	});
+    
+    map.addLayer({
+		"id": "nc-fill",
+		"type": "fill",
+		"source": "source_nc",
+	   'layout': {
+			'visibility': 'visible'
+		},
+		paint: {
+			'fill-color': 'black',
+			'fill-opacity': .5,			
+		}
+	});
+    
+    map.addSource('source_water', { type: 'geojson', data: url_waterfont });
+	
+	map.addLayer({
+		"id": "wf-line",
+		"type": "line",
+		"source": "source_water",
+	   'layout': {
+			'visibility': 'visible'
+		},
+		paint: {
+			'line-color': 'black',
+			'line-width': 1,			
+		}
+	});
+    
+    map.addLayer({
+		"id": "wf-fill",
+		"type": "fill",
+		"source": "source_water",
+	   'layout': {
+			'visibility': 'visible'
+		},
+		paint: {
+			'fill-color': 'blue',
+			'fill-opacity': .5,			
+		}
+	});
+});
+</script>
+
+</body>
+</html>
