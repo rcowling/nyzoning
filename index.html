@@ -86,13 +86,36 @@
         }
 
         #menu a.active {
-            background-color: #3887be;
+            background-color: #006400;
             color: #ffffff;
         }
 
         #menu a.active:hover {
-            background: #3074a4;
+            background: #006400;
+            
         }
+        
+       .legend {
+            background-color: #fff;
+            border-radius: 3px;
+            bottom: 30px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.10);
+            font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+            padding: 10px;
+            position: absolute;
+            right: 10px;
+            z-index: 1;
+        }
+        .legend h4 {
+            margin: 0 0 10px;
+        }
+        .legend div span {
+            border-radius: 5%;
+            display: inline-block;
+            height: 10px;
+            margin-right: 5px;
+            width: 10px;
+        }    
     </style>
 </head>
 <body>
@@ -107,6 +130,15 @@
       </div>
     </nav>
   </div>
+<div id='zoning-legend' class='legend'>
+    <b>Zoning Districts</b>
+    <div><span style='background-color: green'></span>MU</div>
+    <div><span style='background-color: blue'></span>BC</div>
+    <div><span style='background-color: white'></span>CD</div>
+    <div><span style='background-color: aqua'></span>IND</div>
+    <div><span style='background-color: yellow'></span>R-Med</div>
+    <div><span style='background-color: brown'></span>R-High</div>    
+</div>    
 <nav id="menu"></nav>    
 <div id='search-btn' class='search'></div>     
 <div id='map'></div>
@@ -121,7 +153,7 @@ var map = new mapboxgl.Map({
     
 // Clicking on the search button returns map to center
 $('#search-btn').click(function(){
-     map.jumpTo({center: [-74.0104, 41.5034]}); 
+     map.jumpTo({zoom: 13, center: [-74.0104, 41.5034]}); 
 }); 
 // Add zoom and rotation controls to the map.
 map.addControl(new mapboxgl.NavigationControl(), 'top-left');
@@ -218,7 +250,7 @@ map.on('load', function () {
 			'line-color': 'black',
 			'line-width': .5,			
 		}
-	});
+	}, 'place-city-sm');
     
     map.addLayer({
 		"id": "hdr-fill",
@@ -231,7 +263,7 @@ map.on('load', function () {
 			'fill-color': 'brown',
 			'fill-opacity': .5,			
 		}
-	});
+	}, 'place-city-sm');
     
     map.addSource('source_mdr', { type: 'geojson', data: url_mdr });
 	
@@ -246,7 +278,7 @@ map.on('load', function () {
 			'line-color': 'black',
 			'line-width': 1,			
 		}
-	});
+	}, 'place-city-sm');
     
     map.addLayer({
 		"id": "mdr-fill",
@@ -259,7 +291,7 @@ map.on('load', function () {
 			'fill-color': 'yellow',
 			'fill-opacity': .5,			
 		}
-	});
+	}, 'place-city-sm');
     
     map.addSource('source_colter', { type: 'geojson', data: url_colterr });
 	
@@ -268,7 +300,7 @@ map.on('load', function () {
 		"type": "line",
 		"source": "source_colter",
 	   'layout': {
-			'visibility': 'visible'
+			'visibility': 'none'
 		},
 		paint: {
 			'line-color': 'black',
@@ -281,7 +313,7 @@ map.on('load', function () {
 		"type": "fill",
 		"source": "source_colter",
 	   'layout': {
-			'visibility': 'visible'
+			'visibility': 'none'
 		},
 		paint: {
 			'fill-color': 'purple',
@@ -352,7 +384,7 @@ map.on('load', function () {
 		"type": "line",
 		"source": "source_hist",
 	   'layout': {
-			'visibility': 'visible'
+			'visibility': 'none'
 		},
 		paint: {
 			'line-color': 'black',
@@ -365,13 +397,13 @@ map.on('load', function () {
 		"type": "fill",
 		"source": "source_hist",
 	   'layout': {
-			'visibility': 'visible'
+			'visibility': 'none'
 		},
 		paint: {
 			'fill-color': 'pink',
 			'fill-opacity': .5,			
-		}
-	});
+		}, 
+	},  'place-city-sm');
     
     map.addSource('source_nc', { type: 'geojson', data: url_neighborhoodcom });
 	
@@ -380,7 +412,7 @@ map.on('load', function () {
 		"type": "line",
 		"source": "source_nc",
 	   'layout': {
-			'visibility': 'visible'
+			'visibility': 'none'
 		},
 		paint: {
 			'line-color': 'black',
@@ -393,7 +425,7 @@ map.on('load', function () {
 		"type": "fill",
 		"source": "source_nc",
 	   'layout': {
-			'visibility': 'visible'
+			'visibility': 'none'
 		},
 		paint: {
 			'fill-color': 'black',
@@ -408,7 +440,7 @@ map.on('load', function () {
 		"type": "line",
 		"source": "source_water",
 	   'layout': {
-			'visibility': 'visible'
+			'visibility': 'none'
 		},
 		paint: {
 			'line-color': 'black',
@@ -421,7 +453,7 @@ map.on('load', function () {
 		"type": "fill",
 		"source": "source_water",
 	   'layout': {
-			'visibility': 'visible'
+			'visibility': 'none'
 		},
 		paint: {
 			'fill-color': 'blue',
@@ -429,7 +461,101 @@ map.on('load', function () {
 		}
 	});
 }); // end of map load function
+    
+map.on('click', 'wf-fill', function (e) {
+        var feature = e.features[0]; //get the properties of the clicked feature
+        console.log(feature);       
+        new mapboxgl.Popup()
+            .setLngLat(e.lngLat)          
+            .setHTML('<b>' +'Waterfront Protection Overlay' + '</b>')                   
+            .addTo(map); // Add the popup to the map        
+});    
 
+map.on('click', 'nc-fill', function (e) {
+        var feature = e.features[0]; //get the properties of the clicked feature
+        console.log(feature);       
+        new mapboxgl.Popup()
+            .setLngLat(e.lngLat)          
+            .setHTML('<b>' +'Neighborhood Commercial Overlay' + '</b>')                   
+            .addTo(map); // Add the popup to the map        
+});    
+
+map.on('click', 'colter-fill', function (e) {
+        var feature = e.features[0]; //get the properties of the clicked feature
+        console.log(feature);       
+        new mapboxgl.Popup()
+            .setLngLat(e.lngLat)          
+            .setHTML('<b>' +'Colonial Terrace Arcetictual Design District' + '</b>')                   
+            .addTo(map); // Add the popup to the map        
+});
+
+map.on('click', 'hist-fill', function (e) {
+        var feature = e.features[0]; //get the properties of the clicked feature
+        console.log(feature);       
+        new mapboxgl.Popup()
+            .setLngLat(e.lngLat)          
+            .setHTML('<b>' +'Historic District' + '</b>')                   
+            .addTo(map); // Add the popup to the map        
+});   
+    
+map.on('click', 'mixeduse-fill', function (e) {
+        var feature = e.features[0]; //get the properties of the clicked feature               
+        new mapboxgl.Popup()
+            .setLngLat(e.lngLat)          
+            .setHTML('<b>' +'District: ' + '</b>' + feature.properties.ZONING_DIS + '<br>' + '<b>' + 'Owner Name: ' + '</b>' + feature.properties.OWNER_NAME //
+            + '<br>' + '<b>' + 'Address: ' + '</b>' + feature.properties.ADDRESS + '<br>' + '<b>' + 'Year Built: ' + '</b>' + feature.properties.YR_BUILT)   
+            .addTo(map); // Add the popup to the map        
+});   
+    
+map.on('click', 'bc-fill', function (e) {
+        var feature = e.features[0]; //get the properties of the clicked feature
+        console.log(feature);       
+        new mapboxgl.Popup()
+            .setLngLat(e.lngLat)          
+            .setHTML('<b>' +'District: ' + '</b>' + feature.properties.ZONING_DIS + '<br>' + '<b>' + 'Owner Name: ' + '</b>' + feature.properties.OWNER_NAME //
+            + '<br>' + '<b>' + 'Address: ' + '</b>' + feature.properties.ADDRESS + '<br>' + '<b>' + 'Year Built: ' + '</b>' + feature.properties.YR_BUILT)   
+            .addTo(map); // Add the popup to the map        
+});
+
+map.on('click', 'hdr-fill', function (e) {
+        var feature = e.features[0]; //get the properties of the clicked feature
+        console.log(feature);       
+        new mapboxgl.Popup()
+            .setLngLat(e.lngLat)          
+            .setHTML('<b>' +'District: ' + '</b>' + feature.properties.ZONING_DIS + '<br>' + '<b>' + 'Owner Name: ' + '</b>' + feature.properties.OWNER_NAME //
+            + '<br>' + '<b>' + 'Address: ' + '</b>' + feature.properties.ADDRESS + '<br>' + '<b>' + 'Year Built: ' + '</b>' + feature.properties.YR_BUILT)   
+            .addTo(map); // Add the popup to the map        
+}); 
+    
+map.on('click', 'mdr-fill', function (e) {
+        var feature = e.features[0]; //get the properties of the clicked feature
+        console.log(feature);       
+        new mapboxgl.Popup()
+            .setLngLat(e.lngLat)          
+            .setHTML('<b>' +'District: ' + '</b>' + feature.properties.ZONING_DIS + '<br>' + '<b>' + 'Owner Name: ' + '</b>' + feature.properties.OWNER_NAME //
+            + '<br>' + '<b>' + 'Address: ' + '</b>' + feature.properties.ADDRESS + '<br>' + '<b>' + 'Year Built: ' + '</b>' + feature.properties.YR_BUILT)   
+            .addTo(map); // Add the popup to the map        
+});  
+    
+map.on('click', 'ind-fill', function (e) {
+        var feature = e.features[0]; //get the properties of the clicked feature
+        console.log(feature);       
+        new mapboxgl.Popup()
+            .setLngLat(e.lngLat)          
+            .setHTML('<b>' +'District: ' + '</b>' + feature.properties.ZONING_DIS + '<br>' + '<b>' + 'Owner Name: ' + '</b>' + feature.properties.OWNER_NAME //
+            + '<br>' + '<b>' + 'Address: ' + '</b>' + feature.properties.ADDRESS + '<br>' + '<b>' + 'Year Built: ' + '</b>' + feature.properties.YR_BUILT)   
+            .addTo(map); // Add the popup to the map        
+});   
+    
+map.on('click', 'comdist-fill', function (e) {
+        var feature = e.features[0]; //get the properties of the clicked feature
+        console.log(feature);       
+        new mapboxgl.Popup()
+            .setLngLat(e.lngLat)          
+            .setHTML('<b>' +'District: ' + '</b>' + feature.properties.ZONING_DIS + '<br>' + '<b>' + 'Owner Name: ' + '</b>' + feature.properties.OWNER_NAME //
+            + '<br>' + '<b>' + 'Address: ' + '</b>' + feature.properties.ADDRESS + '<br>' + '<b>' + 'Year Built: ' + '</b>' + feature.properties.YR_BUILT)   
+            .addTo(map); // Add the popup to the map        
+});     
 var overlayIds = [ 'wf-fill', 'wf-line', 'nc-line', 'nc-fill', 'colter-line', 'colter-fill' ];
 var historicIds = ['hist-fill', 'hist-line'];  
 var zoneIds = ['mixeduse-line', 'mixeduse-fill', 'bc-line', 'bc-fill', 'hdr-line', 'hdr-fill', 'mdr-line', 'mdr-fill', 'comdist-line', 'comdist-fill', 'ind-line', 'ind-fill'];     
@@ -440,8 +566,8 @@ var link3 = document.createElement('a');
 link.href = '#';
 link2.href = '#';
 link3.href = '#';    
-link.className = 'active';
-link2.className = 'active';  
+//link.className = 'active';
+//link2.className = 'active';  
 link3.className = 'active';    
 link.textContent = "Overlays";
 link2.textContent = "Historic";
