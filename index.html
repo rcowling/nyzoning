@@ -105,6 +105,7 @@
             position: absolute;
             right: 10px;
             z-index: 1;
+            
         }
         .legend h4 {
             margin: 0 0 10px;
@@ -115,7 +116,137 @@
             height: 10px;
             margin-right: 5px;
             width: 10px;
+            border: .5px solid #727577;;
         }    
+        .mapboxgl-popup {
+            max-width: 400px;
+            font: 12px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+        }
+
+.marker-title {
+    font-weight: 700;
+}
+
+.mapboxgl-popup {
+    max-width: 400px;
+    font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
+
+html .mapboxgl-popup-content {
+	padding: 0 0 5px 0;
+	-webkit-box-shadow: 0 0 10px 1px rgba(0,0,0,.2);
+	box-shadow: 0 0 10px 1px rgba(0,0,0,.2);
+}
+
+.mapboxgl-popup h3 {
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 16px !important;
+    padding: 5px 35px 5px 10px;
+    margin: 0;
+	-webkit-border-radius: 3px 3px 0 0;
+	border-radius: 3px 3px 0 0;
+}
+
+.mapboxgl-popup p {
+    margin: 0 10px 5px;
+	line-height:14px;
+}
+
+.mapboxgl-popup p:nth-child(3) {
+    margin: 10px 10px 5px;
+}
+
+.mapboxgl-popup p a {
+    text-decoration:none;
+	color:#ff2285;
+	font-weight:700;
+}
+
+.mapboxgl-popup p a:hover {
+    text-decoration:underline;
+}
+
+#map .mapboxgl-popup .thumb {
+	margin: 0 0 5px;
+	width:300px;
+}
+.mapboxgl-popup .thumb img {
+    max-width:100%;
+}
+
+.mapboxgl-popup-close-button{
+    color: white;
+    font-size: 25px !important;
+}
+        
+.mapboxgl-popup h3 {
+		font-size:9px;
+	}
+	
+	.mapboxgl-popup p {
+		font-size:10px;
+	}
+	
+	.mapboxgl-popup-close-button {
+		font-size:14px;
+		position: aboslute;
+        top: -4px;
+        padding: 2px 6px;
+	}
+        
+        #map .mapboxgl-popup .thumb {
+		width:250px;
+	}
+    
+     .IND {
+	background: #E8BEFF;        
+    }
+    .BC {
+	background: #FFAA00;        
+    }  
+    .RH {
+	background: #A87000;        
+    }
+    .RM {
+	background: #FFE500;        
+    } 
+    .CD {
+	background: #FF7000;        
+    }   
+    .CDD {
+	background: #D3FFBE;        
+    } 
+    .DN {
+	background: #000;        
+    } 
+    .PWD {
+	background: #FF0000;        
+    } 
+    .WG {
+	background: #FF0000;        
+    }
+    .INS {
+	background: #73B2FF;        
+    } 
+    .OS {
+	background: #A3FF73;        
+    } 
+    .PK {
+	background: #38A800;        
+    } 
+    .R-1 {
+	background: #FFFFEB;        
+    } 
+    .RL {
+	background: #FFFFBE;        
+    } 
+    .RH {
+	background: #A87000;        
+    } 
+    .UT {
+	background: #5B5B5B;        
+    }     
     </style>
 </head>
 <body>
@@ -125,20 +256,29 @@
         <a href="#!" class="brand-logo">Newburgh Zoning</a>
         <ul class="right hide-on-med-and-down">
           <li><a href="sass.html">Info</a></li>
-          <li><a href="badges.html">Components</a></li>
+          <li><a href="https://ecode360.com/30538877">Zoning Code</a></li>
         </ul>
       </div>
     </nav>
   </div>
 <div id='zoning-legend' class='legend'>
     <b>Zoning Districts</b>
-    <div><span style='background-color: green'></span>MU</div>
-    <div><span style='background-color: blue'></span>BC</div>
-    <div><span style='background-color: white'></span>CD</div>
-    <div><span style='background-color: aqua'></span>IND</div>
-    <div><span style='background-color: yellow'></span>R-Med</div>
-    <div><span style='background-color: brown'></span>R-High</div>    
-</div>    
+    <div><span style='background-color: #000'></span>DN</div>
+    <div><span style='background-color: #FF0000'></span>PWD</div>
+    <div><span style='background-color: #FFAA00'></span>BC</div>
+    <div><span style='background-color: #FF0000'></span>WG</div>
+    <div><span style='background-color: #FF7000'></span>CD</div>
+    <div><span style='background-color: #D3FFBE'></span>CDD</div>
+    <div><span style='background-color: #E8BEFF'></span>IND</div>  
+    <div><span style='background-color: #73B2FF'></span>INS</div>
+    <div><span style='background-color: #A3FF73'></span>OS</div>
+    <div><span style='background-color: #38A800'></span>PK</div>
+    <div><span style='background-color: #FFFFEB'></span>R1</div>
+    <div><span style='background-color: #FFFFBE'></span>RL</div>
+    <div><span style='background-color: #FFE500'></span>RM</div>
+    <div><span style='background-color: #A87000'></span>RH</div>
+    <div><span style='background-color: #5B5B5B'></span>UT</div>
+</div>      
 <nav id="menu"></nav>    
 <div id='search-btn' class='search'></div>     
 <div id='map'></div>
@@ -169,213 +309,94 @@ map.addControl(new MapboxGeocoder({
 }));    
     
 // Setup variables to load goejson files to the map    
-var url_bc = 'broadwaycorr.geojson';
+var url_zoning = 'zones.geojson';
+var url_wf = 'wf_overlay.geojson';
+var url_cd = 'cd_overlay.geojson';
+var url_hdr	= 'hdr.geojson';
+var url_historic = 'historic.geojson';
 var url_colterr = 'colonialterr.geojson';
 var url_comdist = 'comdistoverlayer.geojson';
-var url_hdr	= 'hdr.geojson';
-var url_historic = 'historic.geojson';    
-var url_industrial = 'industryzone.geojson';
-var url_mdr	= 'mdr.geojson';
-var url_mixeduse = 'mixeduse.geojson';
-var url_neighborhoodcom = 'neighborhoodcom.geojson';    
-var url_waterfont = 'waterfrontoverlayer.geojson'; 
+var url_neighborhoodcom = 'neighborhoodcom.geojson';     
     
 map.on('load', function () {
-    map.addSource('source_mixeduse', { type: 'geojson', data: url_mixeduse });
-	
-	map.addLayer({
-		"id": "mixeduse-line",
-		"type": "line",
-		"source": "source_mixeduse",
-	   'layout': {
-			'visibility': 'visible'
-		},
-		paint: {
-			'line-color': 'black',
-			'line-width': .5,			
-		}
-	});
+    map.addSource('source_zoning', { type: 'geojson', data: url_zoning });
     
     map.addLayer({
-		"id": "mixeduse-fill",
+		"id": "zoning-fill",
 		"type": "fill",
-		"source": "source_mixeduse",
+		"source": "source_zoning",
 	   'layout': {
 			'visibility': 'visible'
 		},
 		paint: {
-			'fill-color': 'green',
-			'fill-opacity': .5,			
-		}
-	});
-    
-    map.addSource('source_bc', { type: 'geojson', data: url_bc });
-	
-	map.addLayer({
-		"id": "bc-line",
-		"type": "line",
-		"source": "source_bc",
-	   'layout': {
-			'visibility': 'visible'
-		},
-		paint: {
-			'line-color': 'black',
-			'line-width': .5,			
-		}
-	});
+			'fill-color': {
+              property: 'ZONING',
+              type: 'categorical',
+                stops: [
+                    ['DN', '#000'],
+                    ['PWD', '#FF0000'],
+                    ['BC', '#FFAA00'],
+                    ["WG", "#FF0000"],
+                    ["CD", "#FF7000"],
+                    ["CDD", "#D3FFBE"],
+                    ["IND", "#E8BEFF"],
+                    ["INS", "#73B2FF"],
+                    ["OS", "#A3FF73"],
+                    ["PK", "#38A800"],
+                    ["R-1", "#FFFFEB"],
+                    ["RL", "#FFFFBE"],
+                    ["RM", "#FFE500"],
+                    ["RH", "#A87000"],
+                    ["UT", "#5B5B5B"],
+                ]
+            },
+			'fill-opacity': 1,			
+		}, 
+	}, 'place-city-sm');
     
     map.addLayer({
-		"id": "bc-fill",
-		"type": "fill",
-		"source": "source_bc",
+		"id": "zoning-line",
+		"type": "line",
+		"source": "source_zoning",
 	   'layout': {
 			'visibility': 'visible'
+		},
+		paint: {
+			'line-color': '#727577',
+			'line-width': .5,			
+		},
+	}, 'place-city-sm');
+    
+    map.addSource('source_wf', { type: 'geojson', data: url_wf });
+	
+	map.addLayer({
+		"id": "wf-line",
+		"type": "line",
+		"source": "source_wf",
+	   'layout': {
+			'visibility': 'none'
+		},
+		paint: {
+			'line-color': '#0070FF',
+			'line-width': 3,	
+            'line-dasharray': [2, 1],
+		}
+	});
+    
+    /*map.addLayer({
+		"id": "wf-fill",
+		"type": "fill",
+		"source": "source_wf",
+	   'layout': {
+			'visibility': 'none'
 		},
 		paint: {
 			'fill-color': 'blue',
 			'fill-opacity': .5,			
 		}
-	});
+	});*/
     
-    map.addSource('source_hdr', { type: 'geojson', data: url_hdr });
-	
-	map.addLayer({
-		"id": "hdr-line",
-		"type": "line",
-		"source": "source_hdr",
-	   'layout': {
-			'visibility': 'visible'
-		},
-		paint: {
-			'line-color': 'black',
-			'line-width': .5,			
-		}
-	}, 'place-city-sm');
-    
-    map.addLayer({
-		"id": "hdr-fill",
-		"type": "fill",
-		"source": "source_hdr",
-	   'layout': {
-			'visibility': 'visible'
-		},
-		paint: {
-			'fill-color': 'brown',
-			'fill-opacity': .5,			
-		}
-	}, 'place-city-sm');
-    
-    map.addSource('source_mdr', { type: 'geojson', data: url_mdr });
-	
-	map.addLayer({
-		"id": "mdr-line",
-		"type": "line",
-		"source": "source_mdr",
-	   'layout': {
-			'visibility': 'visible'
-		},
-		paint: {
-			'line-color': 'black',
-			'line-width': 1,			
-		}
-	}, 'place-city-sm');
-    
-    map.addLayer({
-		"id": "mdr-fill",
-		"type": "fill",
-		"source": "source_mdr",
-	   'layout': {
-			'visibility': 'visible'
-		},
-		paint: {
-			'fill-color': 'yellow',
-			'fill-opacity': .5,			
-		}
-	}, 'place-city-sm');
-    
-    map.addSource('source_colter', { type: 'geojson', data: url_colterr });
-	
-	map.addLayer({
-		"id": "colter-line",
-		"type": "line",
-		"source": "source_colter",
-	   'layout': {
-			'visibility': 'none'
-		},
-		paint: {
-			'line-color': 'black',
-			'line-width': 1,			
-		}
-	});
-    
-    map.addLayer({
-		"id": "colter-fill",
-		"type": "fill",
-		"source": "source_colter",
-	   'layout': {
-			'visibility': 'none'
-		},
-		paint: {
-			'fill-color': 'purple',
-			'fill-opacity': .5,			
-		}
-	});
-    
-    map.addSource('source_comdist', { type: 'geojson', data: url_comdist });
-	
-	map.addLayer({
-		"id": "comdist-line",
-		"type": "line",
-		"source": "source_comdist",
-	   'layout': {
-			'visibility': 'visible'
-		},
-		paint: {
-			'line-color': 'black',
-			'line-width': 1,			
-		}
-	});
-    
-    map.addLayer({
-		"id": "comdist-fill",
-		"type": "fill",
-		"source": "source_comdist",
-	   'layout': {
-			'visibility': 'visible'
-		},
-		paint: {
-			'fill-color': 'white',
-			'fill-opacity': .5,			
-		}
-	});
-    
-    map.addSource('source_ind', { type: 'geojson', data: url_industrial });
-	
-	map.addLayer({
-		"id": "ind-line",
-		"type": "line",
-		"source": "source_ind",
-	   'layout': {
-			'visibility': 'visible'
-		},
-		paint: {
-			'line-color': 'black',
-			'line-width': 1,			
-		}
-	});
-    
-    map.addLayer({
-		"id": "ind-fill",
-		"type": "fill",
-		"source": "source_ind",
-	   'layout': {
-			'visibility': 'visible'
-		},
-		paint: {
-			'fill-color': 'aqua',
-			'fill-opacity': .5,			
-		}
-	});
+       
     
     map.addSource('source_hist', { type: 'geojson', data: url_historic });
 	
@@ -400,10 +421,67 @@ map.on('load', function () {
 			'visibility': 'none'
 		},
 		paint: {
-			'fill-color': 'pink',
+			'fill-color': 'white',
 			'fill-opacity': .5,			
 		}, 
-	},  'place-city-sm');
+	},  'place-city-sm'); 
+    
+    map.addSource('source_comdist', { type: 'geojson', data: url_comdist });
+	
+	map.addLayer({
+		"id": "comdist-line",
+		"type": "line",
+		"source": "source_comdist",
+	   'layout': {
+			'visibility': 'none'
+		},
+		paint: {
+			'line-color': 'black',
+			'line-width': 1,			
+		}
+	});
+    
+    map.addLayer({
+		"id": "comdist-fill",
+		"type": "fill",
+		"source": "source_comdist",
+	   'layout': {
+			'visibility': 'none'
+		},
+		paint: {
+			'fill-color': 'white',
+			'fill-opacity': .5,			
+		}
+	});
+    
+    map.addSource('source_colter', { type: 'geojson', data: url_colterr });
+	
+	map.addLayer({
+		"id": "colter-line",
+		"type": "line",
+		"source": "source_colter",
+	   'layout': {
+			'visibility': 'none'
+		},
+		paint: {
+			'line-color': 'black',
+			'line-width': 3,
+            'line-dasharray': [2, 1],
+		}
+	});
+    
+   /* map.addLayer({
+		"id": "colter-fill",
+		"type": "fill",
+		"source": "source_colter",
+	   'layout': {
+			'visibility': 'none'
+		},
+		paint: {
+			'fill-color': 'purple',
+			'fill-opacity': .5,			
+		}
+	});*/
     
     map.addSource('source_nc', { type: 'geojson', data: url_neighborhoodcom });
 	
@@ -415,12 +493,13 @@ map.on('load', function () {
 			'visibility': 'none'
 		},
 		paint: {
-			'line-color': 'black',
-			'line-width': 1,			
+			'line-color': 'red',
+			'line-width': 3,
+            'line-dasharray': [2, 1],
 		}
 	});
     
-    map.addLayer({
+    /*map.addLayer({
 		"id": "nc-fill",
 		"type": "fill",
 		"source": "source_nc",
@@ -431,36 +510,11 @@ map.on('load', function () {
 			'fill-color': 'black',
 			'fill-opacity': .5,			
 		}
-	});
+	});*/
     
-    map.addSource('source_water', { type: 'geojson', data: url_waterfont });
-	
-	map.addLayer({
-		"id": "wf-line",
-		"type": "line",
-		"source": "source_water",
-	   'layout': {
-			'visibility': 'none'
-		},
-		paint: {
-			'line-color': 'black',
-			'line-width': 1,			
-		}
-	});
-    
-    map.addLayer({
-		"id": "wf-fill",
-		"type": "fill",
-		"source": "source_water",
-	   'layout': {
-			'visibility': 'none'
-		},
-		paint: {
-			'fill-color': 'blue',
-			'fill-opacity': .5,			
-		}
-	});
 }); // end of map load function
+    
+    
     
 map.on('click', 'wf-fill', function (e) {
         var feature = e.features[0]; //get the properties of the clicked feature
@@ -498,13 +552,19 @@ map.on('click', 'hist-fill', function (e) {
             .addTo(map); // Add the popup to the map        
 });   
     
-map.on('click', 'mixeduse-fill', function (e) {
-        var feature = e.features[0]; //get the properties of the clicked feature               
-        new mapboxgl.Popup()
-            .setLngLat(e.lngLat)          
-            .setHTML('<b>' +'District: ' + '</b>' + feature.properties.ZONING_DIS + '<br>' + '<b>' + 'Owner Name: ' + '</b>' + feature.properties.OWNER_NAME //
-            + '<br>' + '<b>' + 'Address: ' + '</b>' + feature.properties.ADDRESS + '<br>' + '<b>' + 'Year Built: ' + '</b>' + feature.properties.YR_BUILT)   
-            .addTo(map); // Add the popup to the map        
+map.on('click', 'zoning-fill', function (e) {
+    var popupContent = '';  
+    var feature = e.features[0]; //get the properties of the clicked feature
+    console.log(feature); 
+    popupContent += (feature.properties.ZONING_DIS) ? '<h3 class='+feature.properties.ZONING+'>'+feature.properties.ZONING_DIS+'</h3>' : '';
+    popupContent += (feature.properties.ZONING) ? '<p><b>District: </b>' + feature.properties.ZONING + '</p>' : '';
+    popupContent += (feature.properties.OWNER_NAME) ? '<p><b>Owner Name: </b>' + feature.properties.OWNER_NAME + '</p>' : '';
+    popupContent += (feature.properties.ADDRESS) ? '<p><b>Address: </b>' + feature.properties.ADDRESS + '</p>' : '';
+    popupContent += (feature.properties.YR_BUILT) ? '<p><b>Year Built: </b>' + feature.properties.YR_BUILT + '</p>' : '';
+    new mapboxgl.Popup()
+        .setLngLat(e.lngLat)          
+        .setHTML(popupContent)   
+        .addTo(map); // Add the popup to the map        
 });   
     
 map.on('click', 'bc-fill', function (e) {
@@ -556,9 +616,9 @@ map.on('click', 'comdist-fill', function (e) {
             + '<br>' + '<b>' + 'Address: ' + '</b>' + feature.properties.ADDRESS + '<br>' + '<b>' + 'Year Built: ' + '</b>' + feature.properties.YR_BUILT)   
             .addTo(map); // Add the popup to the map        
 });     
-var overlayIds = [ 'wf-fill', 'wf-line', 'nc-line', 'nc-fill', 'colter-line', 'colter-fill' ];
+var overlayIds = [ 'wf-line', 'nc-line', 'colter-line', 'colter-fill', 'comdist-line', 'comdist-fill' ];
 var historicIds = ['hist-fill', 'hist-line'];  
-var zoneIds = ['mixeduse-line', 'mixeduse-fill', 'bc-line', 'bc-fill', 'hdr-line', 'hdr-fill', 'mdr-line', 'mdr-fill', 'comdist-line', 'comdist-fill', 'ind-line', 'ind-fill'];     
+var zoneIds = ['zoning-fill', 'zoning-line'];     
 
 var link = document.createElement('a');
 var link2 = document.createElement('a');
@@ -629,6 +689,16 @@ var layers = document.getElementById('menu');
 layers.appendChild(link3);    
 layers.appendChild(link);    
 layers.appendChild(link2);
+    
+// Change the cursor to a pointer when the mouse is over the parcels layer.
+map.on('mouseenter', 'zoning-fill', function () {
+    map.getCanvas().style.cursor = 'pointer';
+});
+
+// Change it back to a pointer when it leaves.
+map.on('mouseleave', 'zoning-fill', function () {
+    map.getCanvas().style.cursor = '';
+});    
     
 </script>
 
