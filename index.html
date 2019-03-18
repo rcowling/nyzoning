@@ -95,10 +95,17 @@
         }
         
        .legend {
-           
+            background-color: #fff;
+            border-radius: 3px;
+            bottom: 30px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.10);
             font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
-            
-            z-index: 1;
+            padding: 10px;
+            position: absolute;
+            right: 10px;
+            height: 200px;
+            overflow-y: auto;
+            z-index: 1   
             
         }
         .legend h4 {
@@ -107,9 +114,9 @@
         .legend div span {
             border-radius: 5%;
             display: inline-block;
-            height: 10px;
+            height: 15px;
             margin-right: 5px;
-            width: 10px;
+            width: 30px;
             border: .5px solid #727577;;
         }    
         .mapboxgl-popup {
@@ -241,7 +248,12 @@ html .mapboxgl-popup-content {
     } 
     .UT {
 	background: #5B5B5B;        
-    }     
+    }
+        
+        .modal .modal-content {
+            padding: 0px !important;
+            padding-left: 5px !important;
+        }    
     </style>
 </head>
 <body>
@@ -249,18 +261,13 @@ html .mapboxgl-popup-content {
     <nav>
       <div class="nav-wrapper">
         <a href="#!" class="brand-logo">Newburgh Zoning</a>
-        <ul class="right hide-on-med-and-down">
-          <li><a href="sass.html">Info</a></li>
+        <ul class="right hide-on-med-and-down">          
           <li><a href="https://ecode360.com/30538877">Zoning Code</a></li>
         </ul>
       </div>
     </nav>
   </div>
-    
-<!-- Modal Structure -->
-  <div id="modal1" class="modal bottom-sheet">
-    <div class="modal-content">
-      <div id='zoning-legend' class='legend' style="display: inline-block;">
+<div id='zoning-legend' class='legend'>
     <b>Zoning Districts</b>
     <div><span style='background-color: #BDDA41'></span>DN</div>
     <div><span style='background-color: #A22D6B'></span>PWD</div>
@@ -268,26 +275,23 @@ html .mapboxgl-popup-content {
     <div><span style='background-color: #FF0000'></span>WG</div>
     <div><span style='background-color: #FF7000'></span>CD</div>
     <div><span style='background-color: #D3FFBE'></span>CDD</div>
-          
-  
-</div>  
-        <div id='zoning-legend2' class='legend' style="display: inline-block;">
-    <b>Zoning Districts</b>
-   
-    
+    <div><span style='background-color: #E8BEFF'></span>IND</div>  
+    <div><span style='background-color: #73B2FF'></span>INS</div>
     <div><span style='background-color: #A3FF73'></span>OS</div>
     <div><span style='background-color: #38A800'></span>PK</div>
     <div><span style='background-color: #FFFFEB'></span>R1</div>
     <div><span style='background-color: #FFFFBE'></span>RL</div>
     <div><span style='background-color: #FFE500'></span>RM</div>
     <div><span style='background-color: #A87000'></span>RH</div>
-    <div><span style='background-color: #5B5B5B'></span>UT</div>
-</div>  
-    </div>
-    <div class="modal-footer">
-      <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
-    </div>
-  </div>    
+    <div><span style='background-color: #5B5B5B'></span>UT</div>    
+    <b>Overlays</b>
+    <div><span style='background-color: #fff; border: 1.5px solid black;' ></span>CDO</div>
+    <div><span style='background-color: #fff; border: 2px dashed blue;'></span>WPO</div>
+    <div><span style='background-color: #fff; border: 2px dashed red;'></span>NC</div>
+    <div><span style='background-color: #fff; border: 2px dashed black;'></span>CTA</div> 
+    <div><span style='background-color: #fff; border: 2px dashed black;'></span>EEH</div>
+</div>      
+   
 <nav id="menu"></nav>    
 <div id='search-btn' class='search'></div>     
 <div id='map'></div>
@@ -511,7 +515,7 @@ map.on('load', function () {
 			'line-width': 3,
             'line-dasharray': [2, 1],
 		}
-	});
+	}, 'place-city-sm');
     
     /*map.addLayer({
 		"id": "nc-fill",
@@ -530,7 +534,7 @@ map.on('load', function () {
     
     
     
-map.on('click', 'wf-fill', function (e) {
+/*map.on('click', 'wf-fill', function (e) {
         var feature = e.features[0]; //get the properties of the clicked feature
         console.log(feature);       
         new mapboxgl.Popup()
@@ -564,7 +568,7 @@ map.on('click', 'hist-fill', function (e) {
             .setLngLat(e.lngLat)          
             .setHTML('<b>' +'Historic District' + '</b>')                   
             .addTo(map); // Add the popup to the map        
-});   
+});   */
     
 map.on('click', 'zoning-fill', function (e) {
     var popupContent = '';  
@@ -581,7 +585,7 @@ map.on('click', 'zoning-fill', function (e) {
         .addTo(map); // Add the popup to the map        
 });   
     
-map.on('click', 'comdist-fill', function (e) {
+/*map.on('click', 'comdist-fill', function (e) {
         var feature = e.features[0]; //get the properties of the clicked feature
         console.log(feature);       
         new mapboxgl.Popup()
@@ -589,7 +593,7 @@ map.on('click', 'comdist-fill', function (e) {
             .setHTML('<b>' +'District: ' + '</b>' + feature.properties.ZONING_DIS + '<br>' + '<b>' + 'Owner Name: ' + '</b>' + feature.properties.OWNER_NAME //
             + '<br>' + '<b>' + 'Address: ' + '</b>' + feature.properties.ADDRESS + '<br>' + '<b>' + 'Year Built: ' + '</b>' + feature.properties.YR_BUILT)   
             .addTo(map); // Add the popup to the map        
-});     
+});     */
 var overlayIds = [ 'wf-line', 'nc-line', 'colter-line', 'comdist-line', 'comdist-fill' ];
 var historicIds = [ 'hist-line'];  
 var zoneIds = ['zoning-fill', 'zoning-line'];     
