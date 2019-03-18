@@ -6,13 +6,12 @@
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
     <!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
     <!--Import materialize.css-->
     <!-- Compiled and minified CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <!-- Compiled and minified JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>    
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.51.0/mapbox-gl.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.51.0/mapbox-gl.css' rel='stylesheet' />
     <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.3.0/mapbox-gl-geocoder.min.js'></script>
@@ -96,14 +95,9 @@
         }
         
        .legend {
-            background-color: #fff;
-            border-radius: 3px;
-            bottom: 30px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.10);
+           
             font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
-            padding: 10px;
-            position: absolute;
-            right: 10px;
+            
             z-index: 1;
             
         }
@@ -139,7 +133,7 @@ html .mapboxgl-popup-content {
 }
 
 .mapboxgl-popup h3 {
-    color: #fff;
+    color: #000;
     text-transform: uppercase;
     font-size: 16px !important;
     padding: 5px 35px 5px 10px;
@@ -176,7 +170,7 @@ html .mapboxgl-popup-content {
 }
 
 .mapboxgl-popup-close-button{
-    color: white;
+    color: black;
     font-size: 25px !important;
 }
         
@@ -195,11 +189,11 @@ html .mapboxgl-popup-content {
         padding: 2px 6px;
 	}
         
-        #map .mapboxgl-popup .thumb {
-		width:250px;
+    #map .mapboxgl-popup .thumb {
+    width:250px;
 	}
     
-     .IND {
+    .IND {
 	background: #E8BEFF;        
     }
     .BC {
@@ -218,10 +212,10 @@ html .mapboxgl-popup-content {
 	background: #D3FFBE;        
     } 
     .DN {
-	background: #000;        
+	background: #BDDA41;        
     } 
     .PWD {
-	background: #FF0000;        
+	background: #A22D6B;        
     } 
     .WG {
 	background: #FF0000;        
@@ -239,7 +233,8 @@ html .mapboxgl-popup-content {
 	background: #FFFFEB;        
     } 
     .RL {
-	background: #FFFFBE;        
+	background: #FFFFBE;  
+        
     } 
     .RH {
 	background: #A87000;        
@@ -261,16 +256,25 @@ html .mapboxgl-popup-content {
       </div>
     </nav>
   </div>
-<div id='zoning-legend' class='legend'>
+    
+<!-- Modal Structure -->
+  <div id="modal1" class="modal bottom-sheet">
+    <div class="modal-content">
+      <div id='zoning-legend' class='legend' style="display: inline-block;">
     <b>Zoning Districts</b>
-    <div><span style='background-color: #000'></span>DN</div>
-    <div><span style='background-color: #FF0000'></span>PWD</div>
+    <div><span style='background-color: #BDDA41'></span>DN</div>
+    <div><span style='background-color: #A22D6B'></span>PWD</div>
     <div><span style='background-color: #FFAA00'></span>BC</div>
     <div><span style='background-color: #FF0000'></span>WG</div>
     <div><span style='background-color: #FF7000'></span>CD</div>
     <div><span style='background-color: #D3FFBE'></span>CDD</div>
-    <div><span style='background-color: #E8BEFF'></span>IND</div>  
-    <div><span style='background-color: #73B2FF'></span>INS</div>
+          
+  
+</div>  
+        <div id='zoning-legend2' class='legend' style="display: inline-block;">
+    <b>Zoning Districts</b>
+   
+    
     <div><span style='background-color: #A3FF73'></span>OS</div>
     <div><span style='background-color: #38A800'></span>PK</div>
     <div><span style='background-color: #FFFFEB'></span>R1</div>
@@ -278,7 +282,12 @@ html .mapboxgl-popup-content {
     <div><span style='background-color: #FFE500'></span>RM</div>
     <div><span style='background-color: #A87000'></span>RH</div>
     <div><span style='background-color: #5B5B5B'></span>UT</div>
-</div>      
+</div>  
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
+    </div>
+  </div>    
 <nav id="menu"></nav>    
 <div id='search-btn' class='search'></div>     
 <div id='map'></div>
@@ -319,6 +328,8 @@ var url_comdist = 'comdistoverlayer.geojson';
 var url_neighborhoodcom = 'neighborhoodcom.geojson';     
     
 map.on('load', function () {
+    $('#modal1').modal(); 
+    $('#modal1').modal('open');  
     map.addSource('source_zoning', { type: 'geojson', data: url_zoning });
     
     map.addLayer({
@@ -333,8 +344,8 @@ map.on('load', function () {
               property: 'ZONING',
               type: 'categorical',
                 stops: [
-                    ['DN', '#000'],
-                    ['PWD', '#FF0000'],
+                    ['DN', '#BDDA41'],
+                    ['PWD', '#A22D6B'],
                     ['BC', '#FFAA00'],
                     ["WG", "#FF0000"],
                     ["CD", "#FF7000"],
@@ -398,48 +409,22 @@ map.on('load', function () {
     
        
     
-    map.addSource('source_hist', { type: 'geojson', data: url_historic });
-	
-	map.addLayer({
-		"id": "hist-line",
-		"type": "line",
-		"source": "source_hist",
-	   'layout': {
-			'visibility': 'none'
-		},
-		paint: {
-			'line-color': 'black',
-			'line-width': 1,			
-		}
-	});
     
-    map.addLayer({
-		"id": "hist-fill",
-		"type": "fill",
-		"source": "source_hist",
-	   'layout': {
-			'visibility': 'none'
-		},
-		paint: {
-			'fill-color': 'white',
-			'fill-opacity': .5,			
-		}, 
-	},  'place-city-sm'); 
     
-    map.addSource('source_comdist', { type: 'geojson', data: url_comdist });
-	
-	map.addLayer({
-		"id": "comdist-line",
-		"type": "line",
-		"source": "source_comdist",
-	   'layout': {
-			'visibility': 'none'
-		},
-		paint: {
-			'line-color': 'black',
-			'line-width': 1,			
-		}
-	});
+//    map.addLayer({
+//		"id": "hist-fill",
+//		"type": "fill",
+//		"source": "source_hist",
+//	   'layout': {
+//			'visibility': 'none'
+//		},
+//		paint: {
+//			'fill-color': 'white',
+//			'fill-opacity': .5,			
+//		}, 
+//	},  'place-city-sm'); 
+    
+    map.addSource('source_comdist', { type: 'geojson', data: url_comdist });	
     
     map.addLayer({
 		"id": "comdist-fill",
@@ -450,7 +435,20 @@ map.on('load', function () {
 		},
 		paint: {
 			'fill-color': 'white',
-			'fill-opacity': .5,			
+			'fill-opacity': .7,			
+		}
+	});
+    
+    map.addLayer({
+		"id": "comdist-line",
+		"type": "line",
+		"source": "source_comdist",
+	   'layout': {
+			'visibility': 'none'
+		},
+		paint: {
+			'line-color': 'black',
+			'line-width': 1,			
 		}
 	});
     
@@ -494,6 +492,22 @@ map.on('load', function () {
 		},
 		paint: {
 			'line-color': 'red',
+			'line-width': 3,
+            'line-dasharray': [2, 1],
+		}
+	});
+    
+    map.addSource('source_hist', { type: 'geojson', data: url_historic });
+	
+	map.addLayer({
+		"id": "hist-line",
+		"type": "line",
+		"source": "source_hist",
+	   'layout': {
+			'visibility': 'none'
+		},
+		paint: {
+			'line-color': 'black',
 			'line-width': 3,
             'line-dasharray': [2, 1],
 		}
@@ -567,46 +581,6 @@ map.on('click', 'zoning-fill', function (e) {
         .addTo(map); // Add the popup to the map        
 });   
     
-map.on('click', 'bc-fill', function (e) {
-        var feature = e.features[0]; //get the properties of the clicked feature
-        console.log(feature);       
-        new mapboxgl.Popup()
-            .setLngLat(e.lngLat)          
-            .setHTML('<b>' +'District: ' + '</b>' + feature.properties.ZONING_DIS + '<br>' + '<b>' + 'Owner Name: ' + '</b>' + feature.properties.OWNER_NAME //
-            + '<br>' + '<b>' + 'Address: ' + '</b>' + feature.properties.ADDRESS + '<br>' + '<b>' + 'Year Built: ' + '</b>' + feature.properties.YR_BUILT)   
-            .addTo(map); // Add the popup to the map        
-});
-
-map.on('click', 'hdr-fill', function (e) {
-        var feature = e.features[0]; //get the properties of the clicked feature
-        console.log(feature);       
-        new mapboxgl.Popup()
-            .setLngLat(e.lngLat)          
-            .setHTML('<b>' +'District: ' + '</b>' + feature.properties.ZONING_DIS + '<br>' + '<b>' + 'Owner Name: ' + '</b>' + feature.properties.OWNER_NAME //
-            + '<br>' + '<b>' + 'Address: ' + '</b>' + feature.properties.ADDRESS + '<br>' + '<b>' + 'Year Built: ' + '</b>' + feature.properties.YR_BUILT)   
-            .addTo(map); // Add the popup to the map        
-}); 
-    
-map.on('click', 'mdr-fill', function (e) {
-        var feature = e.features[0]; //get the properties of the clicked feature
-        console.log(feature);       
-        new mapboxgl.Popup()
-            .setLngLat(e.lngLat)          
-            .setHTML('<b>' +'District: ' + '</b>' + feature.properties.ZONING_DIS + '<br>' + '<b>' + 'Owner Name: ' + '</b>' + feature.properties.OWNER_NAME //
-            + '<br>' + '<b>' + 'Address: ' + '</b>' + feature.properties.ADDRESS + '<br>' + '<b>' + 'Year Built: ' + '</b>' + feature.properties.YR_BUILT)   
-            .addTo(map); // Add the popup to the map        
-});  
-    
-map.on('click', 'ind-fill', function (e) {
-        var feature = e.features[0]; //get the properties of the clicked feature
-        console.log(feature);       
-        new mapboxgl.Popup()
-            .setLngLat(e.lngLat)          
-            .setHTML('<b>' +'District: ' + '</b>' + feature.properties.ZONING_DIS + '<br>' + '<b>' + 'Owner Name: ' + '</b>' + feature.properties.OWNER_NAME //
-            + '<br>' + '<b>' + 'Address: ' + '</b>' + feature.properties.ADDRESS + '<br>' + '<b>' + 'Year Built: ' + '</b>' + feature.properties.YR_BUILT)   
-            .addTo(map); // Add the popup to the map        
-});   
-    
 map.on('click', 'comdist-fill', function (e) {
         var feature = e.features[0]; //get the properties of the clicked feature
         console.log(feature);       
@@ -616,8 +590,8 @@ map.on('click', 'comdist-fill', function (e) {
             + '<br>' + '<b>' + 'Address: ' + '</b>' + feature.properties.ADDRESS + '<br>' + '<b>' + 'Year Built: ' + '</b>' + feature.properties.YR_BUILT)   
             .addTo(map); // Add the popup to the map        
 });     
-var overlayIds = [ 'wf-line', 'nc-line', 'colter-line', 'colter-fill', 'comdist-line', 'comdist-fill' ];
-var historicIds = ['hist-fill', 'hist-line'];  
+var overlayIds = [ 'wf-line', 'nc-line', 'colter-line', 'comdist-line', 'comdist-fill' ];
+var historicIds = [ 'hist-line'];  
 var zoneIds = ['zoning-fill', 'zoning-line'];     
 
 var link = document.createElement('a');
