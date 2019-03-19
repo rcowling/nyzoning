@@ -250,10 +250,15 @@ html .mapboxgl-popup-content {
 	background: #5B5B5B;        
     }
         
-        .modal .modal-content {
-            padding: 0px !important;
-            padding-left: 5px !important;
-        }    
+    .modal .modal-content {
+        padding: 0px !important;
+        padding-left: 5px !important;
+    }   
+    @media only screen and (max-width: 600px) {
+        nav .brand-logo {
+            font-size: 20px !important;
+        }
+    }     
     </style>
 </head>
 <body>
@@ -329,17 +334,32 @@ var url_hdr	= 'hdr.geojson';
 var url_historic = 'historic.geojson';
 var url_colterr = 'colonialterr.geojson';
 var url_comdist = 'comdistoverlayer.geojson';
-var url_neighborhoodcom = 'neighborhoodcom.geojson';     
+var url_neighborhoodcom = 'neighborhoodcom.geojson'; 
+var url_opzones = 'opzones.geojson';    
+
+var hoveredStateId =  null;
+    
+// Create a popup, but don't add it to the map yet.
+var popup = new mapboxgl.Popup({
+closeButton: true,
+closeOnClick: false
+});      
     
 map.on('load', function () {
     $('#modal1').modal(); 
     $('#modal1').modal('open');  
-    map.addSource('source_zoning', { type: 'geojson', data: url_zoning });
+    //map.addSource('source_zoning', { type: 'geojson', data: url_zoning });
+    
+    map.addSource('zones-bbtzts', {
+        'type': 'vector',
+        'url': 'mapbox://rcowling.4imnu3ys'
+    });
     
     map.addLayer({
 		"id": "zoning-fill",
 		"type": "fill",
-		"source": "source_zoning",
+		"source": "zones-bbtzts",
+        'source-layer':  "zones-bbtzts",
 	   'layout': {
 			'visibility': 'visible'
 		},
@@ -365,22 +385,42 @@ map.on('load', function () {
                     ["UT", "#5B5B5B"],
                 ]
             },
-			'fill-opacity': .6,			
-		}, 
+			'fill-opacity': ["case",
+                    ["boolean", ["feature-state", "hover"], false],
+                    1,
+                    0.5
+                    ]	
+            }		
+		
 	}, 'place-city-sm');
     
     map.addLayer({
 		"id": "zoning-line",
 		"type": "line",
-		"source": "source_zoning",
+		"source": "zones-bbtzts",
+        'source-layer': 'zones-bbtzts',
 	   'layout': {
 			'visibility': 'visible'
 		},
 		paint: {
 			'line-color': '#727577',
-			'line-width': .5,			
-		},
+			'line-width': 0.5,
+        }
+		
 	}, 'place-city-sm');
+    
+    map.addLayer({
+        'id': 'zoning-hover',
+        'type': 'line',
+        'source': 'zones-bbtzts',
+        'source-layer': 'zones-bbtzts',
+        'layout': {},
+        'paint': {
+            'line-color': 'black',
+            'line-width': 2
+        },
+        'filter': ['==', 'OBJECTID', '']
+    });    
     
     map.addSource('source_wf', { type: 'geojson', data: url_wf });
 	
@@ -466,7 +506,7 @@ map.on('load', function () {
 			'visibility': 'none'
 		},
 		paint: {
-			'line-color': 'black',
+			'line-color': 'saddlebrown',
 			'line-width': 3,
             'line-dasharray': [2, 1],
 		}
@@ -517,6 +557,22 @@ map.on('load', function () {
 		}
 	}, 'place-city-sm');
     
+    map.addSource('source_opzones', { type: 'geojson', data: url_opzones });
+	
+	map.addLayer({
+		"id": "op-fill",
+		"type": "fill",
+		"source": "source_opzones",
+	   'layout': {
+			'visibility': 'none'
+		},
+		paint: {
+			'fill-color': 'purple',
+            'fill-outline-color': 'white',
+            'fill-opacity': .5,
+		}
+	});
+    
     /*map.addLayer({
 		"id": "nc-fill",
 		"type": "fill",
@@ -529,6 +585,27 @@ map.on('load', function () {
 			'fill-opacity': .5,			
 		}
 	});*/
+ /*   // When the user moves their mouse over the state-fill layer, we'll update the
+// feature state for the feature under the mouse.
+map.on("mousemove", "zoning-fill", function(e) {
+if (e.features.length > 0) {
+if (hoveredStateId) {
+map.setFeatureState({source: 'zones-bbtzts', sourceLayer: 'zones-bbtzts', id: hoveredStateId}, { hover: false});
+}
+hoveredStateId = e.features[0].id;
+console.log(e.features[0].id);    
+map.setFeatureState({source: 'zones-bbtzts', sourceLayer: 'zones-bbtzts',  id: hoveredStateId}, { hover: true});
+}
+});
+ 
+// When the mouse leaves the state-fill layer, update the feature state of the
+// previously hovered feature.
+map.on("mouseleave", "zoning-fill", function() {
+if (hoveredStateId) {
+map.setFeatureState({source: 'zones-bbtzts', sourceLayer: 'zones-bbtzts', id: hoveredStateId}, { hover: false});
+}
+hoveredStateId =  null;
+});*/
     
 }); // end of map load function
     
@@ -579,10 +656,9 @@ map.on('click', 'zoning-fill', function (e) {
     popupContent += (feature.properties.OWNER_NAME) ? '<p><b>Owner Name: </b>' + feature.properties.OWNER_NAME + '</p>' : '';
     popupContent += (feature.properties.ADDRESS) ? '<p><b>Address: </b>' + feature.properties.ADDRESS + '</p>' : '';
     popupContent += (feature.properties.YR_BUILT) ? '<p><b>Year Built: </b>' + feature.properties.YR_BUILT + '</p>' : '';
-    new mapboxgl.Popup()
-        .setLngLat(e.lngLat)          
-        .setHTML(popupContent)   
-        .addTo(map); // Add the popup to the map        
+    popup.setLngLat(e.lngLat)
+        .setHTML(popupContent)
+        .addTo(map);         
 });   
     
 /*map.on('click', 'comdist-fill', function (e) {
@@ -594,8 +670,8 @@ map.on('click', 'zoning-fill', function (e) {
             + '<br>' + '<b>' + 'Address: ' + '</b>' + feature.properties.ADDRESS + '<br>' + '<b>' + 'Year Built: ' + '</b>' + feature.properties.YR_BUILT)   
             .addTo(map); // Add the popup to the map        
 });     */
-var overlayIds = [ 'wf-line', 'nc-line', 'colter-line', 'comdist-line', 'comdist-fill' ];
-var historicIds = [ 'hist-line'];  
+var overlayIds = [ 'wf-line', 'nc-line', 'colter-line', 'comdist-line', 'comdist-fill', 'hist-line' ];
+var historicIds = [ 'op-fill'];  
 var zoneIds = ['zoning-fill', 'zoning-line'];     
 
 var link = document.createElement('a');
@@ -608,7 +684,7 @@ link3.href = '#';
 //link2.className = 'active';  
 link3.className = 'active';    
 link.textContent = "Overlays";
-link2.textContent = "Historic";
+link2.textContent = "QOZs";
 link3.textContent = "Zones";    
 link.onclick = function (e) {
     for(var index in overlayIds) {
@@ -667,18 +743,29 @@ var layers = document.getElementById('menu');
 layers.appendChild(link3);    
 layers.appendChild(link);    
 layers.appendChild(link2);
-    
+  
 // Change the cursor to a pointer when the mouse is over the parcels layer.
-map.on('mouseenter', 'zoning-fill', function (e) {
+map.on('mousemove', 'zoning-fill', function (e) {
+    //map.setFilter('zoning-hover', ['==', 'OBJECTID', e.features[0].properties.OBJECTID]);
     var feature = e.features[0];
     map.getCanvas().style.cursor = 'pointer';
-    map.setPaintProperty(feature, 'line-width', 2);
-    
+    var popupContent = '';  
+    var feature = e.features[0]; //get the properties of the clicked feature
+    console.log(feature); 
+    popupContent += (feature.properties.ZONING_DIS) ? '<h3 class='+feature.properties.ZONING+'>'+feature.properties.ZONING_DIS+'</h3>' : '';
+    popupContent += (feature.properties.ZONING) ? '<p><b>District: </b>' + feature.properties.ZONING + '</p>' : '';
+    popupContent += (feature.properties.OWNER_NAME) ? '<p><b>Owner Name: </b>' + feature.properties.OWNER_NAME + '</p>' : '';
+    popupContent += (feature.properties.ADDRESS) ? '<p><b>Address: </b>' + feature.properties.ADDRESS + '</p>' : '';
+    popupContent += (feature.properties.YR_BUILT) ? '<p><b>Year Built: </b>' + feature.properties.YR_BUILT + '</p>' : '';
+    popup.setLngLat(e.lngLat)
+        .setHTML(popupContent)
+        .addTo(map);       
 });
 
 // Change it back to a pointer when it leaves.
 map.on('mouseleave', 'zoning-fill', function () {
     map.getCanvas().style.cursor = '';
+    popup.remove();
 });    
     
 </script>
