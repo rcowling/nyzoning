@@ -293,8 +293,11 @@ html .mapboxgl-popup-content {
     <div><span style='background-color: #fff; border: 1.5px solid black;' ></span>Commerical District</div>
     <div><span style='background-color: #fff; border: 2px dashed blue;'></span>Waterfront Protection Overlay</div>
     <div><span style='background-color: #fff; border: 2px dashed red;'></span>Neighborhood Commercial</div>
-    <div><span style='background-color: #fff; border: 2px dashed black;'></span>Colonial Terrace Arcetictual Design District</div> 
+    <div><span style='background-color: #fff; border: 2px dashed saddlebrown;'></span>Colonial Terrace Arcetictual Design District</div> 
     <div><span style='background-color: #fff; border: 2px dashed black;'></span>East End Hitoric District</div>
+    <b>QOZs</b>
+    <div><span style='background-color: purple'></span>Qualified Opportunity Zone</div>
+    
 </div>      
    
 <nav id="menu"></nav>    
@@ -414,6 +417,7 @@ map.on('load', function () {
         'type': 'line',
         'source': 'zones-bbtzts',
         'source-layer': 'zones-bbtzts',
+        'minzoom': 15,
         'layout': {},
         'paint': {
             'line-color': 'black',
@@ -746,7 +750,7 @@ layers.appendChild(link2);
   
 // Change the cursor to a pointer when the mouse is over the parcels layer.
 map.on('mousemove', 'zoning-fill', function (e) {
-    //map.setFilter('zoning-hover', ['==', 'OBJECTID', e.features[0].properties.OBJECTID]);
+    map.setFilter('zoning-hover', ['==', 'OBJECTID', e.features[0].properties.OBJECTID]);
     var feature = e.features[0];
     map.getCanvas().style.cursor = 'pointer';
     var popupContent = '';  
