@@ -258,6 +258,10 @@ html .mapboxgl-popup-content {
         nav .brand-logo {
             font-size: 20px !important;
         }
+        
+        .legend {
+            display: none;
+        }
     }     
     </style>
 </head>
@@ -758,9 +762,10 @@ map.on('mousemove', 'zoning-fill', function (e) {
     console.log(feature); 
     popupContent += (feature.properties.ZONING_DIS) ? '<h3 class='+feature.properties.ZONING+'>'+feature.properties.ZONING_DIS+'</h3>' : '';
     popupContent += (feature.properties.ZONING) ? '<p><b>District: </b>' + feature.properties.ZONING + '</p>' : '';
+    /*popupContent += (feature.properties.ZONING) ? '<p><b>District: </b>' + feature.properties.ZONING + '</p>' : '';
     popupContent += (feature.properties.OWNER_NAME) ? '<p><b>Owner Name: </b>' + feature.properties.OWNER_NAME + '</p>' : '';
     popupContent += (feature.properties.ADDRESS) ? '<p><b>Address: </b>' + feature.properties.ADDRESS + '</p>' : '';
-    popupContent += (feature.properties.YR_BUILT) ? '<p><b>Year Built: </b>' + feature.properties.YR_BUILT + '</p>' : '';
+    popupContent += (feature.properties.YR_BUILT) ? '<p><b>Year Built: </b>' + feature.properties.YR_BUILT + '</p>' : '';*/
     popup.setLngLat(e.lngLat)
         .setHTML(popupContent)
         .addTo(map);       
