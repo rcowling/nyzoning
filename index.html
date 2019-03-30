@@ -6,6 +6,7 @@
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
     <!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Raleway|Roboto" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
     <!--Import materialize.css-->
     <!-- Compiled and minified CSS -->
@@ -30,6 +31,12 @@
             }
         nav .brand-logo {
             font-size: 23px;
+            font-family: 'Raleway', sans-serif;
+        }
+        
+        nav ul a {
+            font-family: 'Helvetica', sans-serif;
+            
         }
         .search {
               position: absolute;
@@ -61,7 +68,7 @@
             width: 80px;
             height: 141px;
             border: 1px solid rgba(0,0,0,0.4);
-            font-family: 'Open Sans', sans-serif;
+            font-family: font-family: 'Helvetica', 'Arial', sans-serif;
         }
 
         #menu a {
@@ -99,7 +106,7 @@
             border-radius: 3px;
             bottom: 30px;
             box-shadow: 0 1px 2px rgba(0,0,0,0.10);
-            font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+            font: 12px/20px 'Roboto',Helvetica,Arial,sans-serif; 
             padding: 10px;
             position: absolute;
             right: 10px;
@@ -130,7 +137,7 @@
 
 .mapboxgl-popup {
     max-width: 400px;
-    font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    font: 18px/20px 'Roboto', sans-serif;
 }
 
 html .mapboxgl-popup-content {
@@ -142,7 +149,7 @@ html .mapboxgl-popup-content {
 .mapboxgl-popup h3 {
     color: #000;
     text-transform: uppercase;
-    font-size: 16px !important;
+    font: 16px 'Raleway', sans-serif !important;     
     padding: 5px 35px 5px 10px;
     margin: 0;
 	-webkit-border-radius: 3px 3px 0 0;
@@ -183,10 +190,11 @@ html .mapboxgl-popup-content {
         
 .mapboxgl-popup h3 {
 		font-size:9px;
+        font-family: 'Roboto', sans-serif;
 	}
 	
 	.mapboxgl-popup p {
-		font-size:10px;
+		font-size:14px;
 	}
 	
 	.mapboxgl-popup-close-button {
@@ -254,6 +262,27 @@ html .mapboxgl-popup-content {
         padding: 0px !important;
         padding-left: 5px !important;
     }   
+        #logo {
+            position: absolute;
+            
+           
+            top: 430px;
+            left: -140px;
+            z-index: 9999999 !important;
+        }    
+        
+        img {
+    background-color:  #006400;
+             border:2px solid black;
+            opacity: .9;
+  -webkit-transform: scale(0.3); /* Saf3.1+, Chrome */
+     -moz-transform: scale(0.3); /* FF3.5+ */
+      -ms-transform: scale(0.3); /* IE9 */
+       -o-transform: scale(0.3); /* Opera 10.5+ */
+          transform: scale(0.3);
+             /* IE6–IE9 */
+             filter: progid:DXImageTransform.Microsoft.Matrix(M11=0.9999619230641713, M12=-0.008726535498373935, M21=0.008726535498373935, M22=0.9999619230641713,SizingMethod='auto expand');
+}​
     @media only screen and (max-width: 600px) {
         nav .brand-logo {
             font-size: 20px !important;
@@ -307,11 +336,12 @@ html .mapboxgl-popup-content {
 <nav id="menu"></nav>    
 <div id='search-btn' class='search'></div>     
 <div id='map'></div>
+    
 <script>
 mapboxgl.accessToken = 'pk.eyJ1IjoicmNvd2xpbmciLCJhIjoiY2lzZ2YwcjZtMDFwdzNvcnQ3bmR3NXFhcCJ9.TI01a_YqNaqKWigFu70x7w';
 var map = new mapboxgl.Map({
     container: 'map', // container id
-    style: 'mapbox://styles/mapbox/streets-v9', // stylesheet location
+    style: 'mapbox://styles/rcowling/cjtueeorx0v9h1fl5zg4mb9xd', // stylesheet location
     center: [-74.0104, 41.5034], // starting position [lng, lat]
     zoom: 13 // starting zoom
 });
@@ -399,7 +429,7 @@ map.on('load', function () {
                     ]	
             }		
 		
-	}, 'place-city-sm');
+	}, 'settlement-label');
     
     map.addLayer({
 		"id": "zoning-line",
@@ -414,7 +444,7 @@ map.on('load', function () {
 			'line-width': 0.5,
         }
 		
-	}, 'place-city-sm');
+	}, 'settlement-label');
     
     map.addLayer({
         'id': 'zoning-hover',
@@ -474,7 +504,7 @@ map.on('load', function () {
 //			'fill-color': 'white',
 //			'fill-opacity': .5,			
 //		}, 
-//	},  'place-city-sm'); 
+//	},  'place-label'); 
     
     map.addSource('source_comdist', { type: 'geojson', data: url_comdist });	
     
@@ -563,7 +593,7 @@ map.on('load', function () {
 			'line-width': 3,
             'line-dasharray': [2, 1],
 		}
-	}, 'place-city-sm');
+	}, 'settlement-label');
     
     map.addSource('source_opzones', { type: 'geojson', data: url_opzones });
 	
@@ -661,7 +691,7 @@ map.on('click', 'zoning-fill', function (e) {
     console.log(feature); 
     popupContent += (feature.properties.ZONING_DIS) ? '<h3 class='+feature.properties.ZONING+'>'+feature.properties.ZONING_DIS+'</h3>' : '';
     popupContent += (feature.properties.ZONING) ? '<p><b>District: </b>' + feature.properties.ZONING + '</p>' : '';
-    popupContent += (feature.properties.OWNER_NAME) ? '<p><b>Owner Name: </b>' + feature.properties.OWNER_NAME + '</p>' : '';
+   // popupContent += (feature.properties.OWNER_NAME) ? '<p><b>Owner Name: </b>' + feature.properties.OWNER_NAME + '</p>' : '';
     popupContent += (feature.properties.ADDRESS) ? '<p><b>Address: </b>' + feature.properties.ADDRESS + '</p>' : '';
     popupContent += (feature.properties.YR_BUILT) ? '<p><b>Year Built: </b>' + feature.properties.YR_BUILT + '</p>' : '';
     popup.setLngLat(e.lngLat)
@@ -762,10 +792,10 @@ map.on('mousemove', 'zoning-fill', function (e) {
     console.log(feature); 
     popupContent += (feature.properties.ZONING_DIS) ? '<h3 class='+feature.properties.ZONING+'>'+feature.properties.ZONING_DIS+'</h3>' : '';
     popupContent += (feature.properties.ZONING) ? '<p><b>District: </b>' + feature.properties.ZONING + '</p>' : '';
-    /*popupContent += (feature.properties.ZONING) ? '<p><b>District: </b>' + feature.properties.ZONING + '</p>' : '';
-    popupContent += (feature.properties.OWNER_NAME) ? '<p><b>Owner Name: </b>' + feature.properties.OWNER_NAME + '</p>' : '';
+   // popupContent += (feature.properties.ZONING) ? '<p><b>District: </b>' + feature.properties.ZONING + '</p>' : '';
+    //popupContent += (feature.properties.OWNER_NAME) ? '<p><b>Owner Name: </b>' + feature.properties.OWNER_NAME + '</p>' : '';
     popupContent += (feature.properties.ADDRESS) ? '<p><b>Address: </b>' + feature.properties.ADDRESS + '</p>' : '';
-    popupContent += (feature.properties.YR_BUILT) ? '<p><b>Year Built: </b>' + feature.properties.YR_BUILT + '</p>' : '';*/
+    popupContent += (feature.properties.YR_BUILT) ? '<p><b>Year Built: </b>' + feature.properties.YR_BUILT + '</p>' : '';
     popup.setLngLat(e.lngLat)
         .setHTML(popupContent)
         .addTo(map);       
