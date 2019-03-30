@@ -110,7 +110,7 @@
             padding: 10px;
             position: absolute;
             right: 10px;
-            height: 200px;
+            height: 230px;
             overflow-y: auto;
             z-index: 1   
             
@@ -262,6 +262,14 @@ html .mapboxgl-popup-content {
         padding: 0px !important;
         padding-left: 5px !important;
     }   
+        #logo {
+            position: absolute;
+            
+           
+            top: 5px;
+            right: 120px;
+            z-index: 9999999 !important;
+        }    
         
        
     @media only screen and (max-width: 600px) {
@@ -287,6 +295,7 @@ html .mapboxgl-popup-content {
     </nav>
   </div>
 <div id='zoning-legend' class='legend'>
+    <center><img src="logo.png" height="130" width="153"></center>
     <b>Zoning Districts</b>
     <div><span style='background-color: #BDDA41'></span>Downtown Neighborhood</div>
     <div><span style='background-color: #A22D6B'></span>Planned Waterfront District</div>
@@ -316,13 +325,13 @@ html .mapboxgl-popup-content {
    
 <nav id="menu"></nav>    
 <div id='search-btn' class='search'></div>     
-<div id='map'></div>
+<div id='map'></div>  
     
 <script>
 mapboxgl.accessToken = 'pk.eyJ1IjoicmNvd2xpbmciLCJhIjoiY2lzZ2YwcjZtMDFwdzNvcnQ3bmR3NXFhcCJ9.TI01a_YqNaqKWigFu70x7w';
 var map = new mapboxgl.Map({
     container: 'map', // container id
-    style: 'mapbox://styles/rcowling/cjtueeorx0v9h1fl5zg4mb9xd', // stylesheet location
+    style: 'mapbox://styles/rcowling/cjtvpbz9a0h8u1fpnwsbk8bd3', // stylesheet location
     center: [-74.0104, 41.5034], // starting position [lng, lat]
     zoom: 13 // starting zoom
 });
