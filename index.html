@@ -19,176 +19,190 @@
     <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.3.0/mapbox-gl-geocoder.css' type='text/css' />
     
     <style>
-        body { margin:0; padding:0; }
-        #map { position:absolute; top:0; bottom:0; width:100%; margin-top: 46px;}
-         nav {
-                height: 46px;
-                line-height: 46px;
-                background-color: #006400;                 
-             }
-        ut:not([type]), input[type=text]:not(.browser-default), input[type=password]:not(.browser-default), input[type=email]:not(.browser-default), input[type=url]:not(.browser-default), input[type=time]:not(.browser-default), input[type=date]:not(.browser-default), input[type=datetime]:not(.browser-default), input[type=datetime-local]:not(.browser-default), input[type=tel]:not(.browser-default), input[type=number]:not(.browser-default), input[type=search]:not(.browser-default), textarea.materialize-textarea {
-                -webkit-box-sizing: inherit !important; 
-            }
-        nav .brand-logo {
-            font-size: 23px;
-            font-family: 'Raleway', sans-serif;
+    body { margin:0; padding:0; }
+    #map { position:absolute; top:0; bottom:0; width:100%; margin-top: 46px;}
+     nav {
+            height: 46px;
+            line-height: 46px;
+            background-color: #006400;                 
+         }
+    ut:not([type]), input[type=text]:not(.browser-default), input[type=password]:not(.browser-default), input[type=email]:not(.browser-default), input[type=url]:not(.browser-default), input[type=time]:not(.browser-default), input[type=date]:not(.browser-default), input[type=datetime]:not(.browser-default), input[type=datetime-local]:not(.browser-default), input[type=tel]:not(.browser-default), input[type=number]:not(.browser-default), input[type=search]:not(.browser-default), textarea.materialize-textarea {
+            -webkit-box-sizing: inherit !important; 
         }
+    nav .brand-logo {
+        font-size: 23px;
+        font-family: 'Raleway', sans-serif;
+    }
+    
+    nav ul a {
+        font-family: 'Helvetica', sans-serif;
         
-        nav ul a {
-            font-family: 'Helvetica', sans-serif;
-            
-        }
-        .search {
-              position: absolute;
-              top: 165px;
-              left: 10px;      
-              background-color:rgba(255,255,255);
-              margin-left:0;
-              border-radius:4px 4px 4px;
-              box-shadow: 0px 0px 0px 2px rgba(0, 0, 0, 0.1);       
-              width:30px;
-              height:30px;
-              background-repeat: no-repeat;
-              background-position: center;
-              background-image: url('home.svg') ; 
-              background-size: 20px 20px;  
-              z-index: 3;    
-              cursor: pointer;
-        }
-        .search:hover {
-             background-color:rgba(220,220,220, 1);          
-        }
-        #menu {
-            background: #fff;
-            position: absolute;
-            z-index: 1;
-            top: 120px;
-            right: 10px;
-            border-radius: 3px;
-            width: 80px;
-            height: 141px;
-            border: 1px solid rgba(0,0,0,0.4);
-            font-family: font-family: 'Helvetica', 'Arial', sans-serif;
-        }
+    }
+    .search {
+          position: absolute;
+          top: 165px;
+          left: 10px;      
+          background-color:rgba(255,255,255);
+          margin-left:0;
+          border-radius:4px 4px 4px;
+          box-shadow: 0px 0px 0px 2px rgba(0, 0, 0, 0.1);       
+          width:30px;
+          height:30px;
+          background-repeat: no-repeat;
+          background-position: center;
+          background-image: url('home.svg') ; 
+          background-size: 20px 20px;  
+          z-index: 3;    
+          cursor: pointer;
+    }
+    .search:hover {
+         background-color:rgba(220,220,220, 1);          
+    }
 
-        #menu a {
-            font-size: 13px;
-            color: #404040;
-            display: block;
-            margin: 0;
-            padding: 0;    
-            text-decoration: none;
-            border-bottom: 1px solid rgba(0,0,0,0.25);
-            text-align: center;
-        }
+    
+    #menu {
+        background: #fff;
+        position: absolute;
+        z-index: 1;
+        top: 120px;
+        right: 10px;
+        border-radius: 3px;
+        width: 80px;
+        height: 141px;
+        border: 1px solid rgba(0,0,0,0.4);
+        font-family: font-family: 'Helvetica', 'Arial', sans-serif;
+    }
 
-        #menu a:last-child {
-            border: none;
-        }
+    #menu a {
+        font-size: 13px;
+        color: #404040;
+        display: block;
+        margin: 0;
+        padding: 0;    
+        text-decoration: none;
+        border-bottom: 1px solid rgba(0,0,0,0.25);
+        text-align: center;
+    }
 
-        #menu a:hover {
-            background-color: #f8f8f8;
-            color: #404040;
-        }
+    #menu a:last-child {
+        border: none;
+    }
 
-        #menu a.active {
-            background-color: #006400;
-            color: #ffffff;
-        }
+    #menu a:hover {
+        background-color: #f8f8f8;
+        color: #404040;
+    }
 
-        #menu a.active:hover {
-            background: #006400;
-            
-        }
+    #menu a.active {
+        background-color: #006400;
+        color: #ffffff;
+    }
+
+    #menu a.active:hover {
+        background: #006400;
         
-       .legend {
-            background-color: #fff;
-            border-radius: 3px;
-            bottom: 30px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.10);
-            font: 12px/20px 'Roboto',Helvetica,Arial,sans-serif; 
-            padding: 10px;
-            position: absolute;
-            right: 10px;
-            height: 230px;
-            overflow-y: auto;
-            z-index: 1   
-            
-        }
-        .legend h4 {
-            margin: 0 0 10px;
-        }
-        .legend div span {
-            border-radius: 5%;
-            display: inline-block;
-            height: 15px;
-            margin-right: 5px;
-            width: 30px;
-            border: .5px solid #727577;;
-        }    
-        .mapboxgl-popup {
-            max-width: 400px;
-            font: 12px 'Helvetica Neue', Arial, Helvetica, sans-serif;
-        }
+    }   
 
-.marker-title {
-    font-weight: 700;
-}
-
-.mapboxgl-popup {
-    max-width: 400px;
-    font: 18px/20px 'Roboto', sans-serif;
-}
-
-html .mapboxgl-popup-content {
-	padding: 0 0 5px 0;
-	-webkit-box-shadow: 0 0 10px 1px rgba(0,0,0,.2);
-	box-shadow: 0 0 10px 1px rgba(0,0,0,.2);
-}
-
-.mapboxgl-popup h3 {
-    color: #000;
-    text-transform: uppercase;
-    font: 16px 'Raleway', sans-serif !important;     
-    padding: 5px 35px 5px 10px;
-    margin: 0;
-	-webkit-border-radius: 3px 3px 0 0;
-	border-radius: 3px 3px 0 0;
-}
-
-.mapboxgl-popup p {
-    margin: 0 10px 5px;
-	line-height:14px;
-}
-
-.mapboxgl-popup p:nth-child(3) {
-    margin: 10px 10px 5px;
-}
-
-.mapboxgl-popup p a {
-    text-decoration:none;
-	color:#ff2285;
-	font-weight:700;
-}
-
-.mapboxgl-popup p a:hover {
-    text-decoration:underline;
-}
-
-#map .mapboxgl-popup .thumb {
-	margin: 0 0 5px;
-	width:300px;
-}
-.mapboxgl-popup .thumb img {
-    max-width:100%;
-}
-
-.mapboxgl-popup-close-button{
-    color: black;
-    font-size: 25px !important;
-}
+    .legend {
+        background-color: #fff;
+        border-radius: 3px;
+        bottom: 30px;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.10);
+        font: 12px/20px 'Roboto',Helvetica,Arial,sans-serif; 
+        padding: 10px;
+        position: absolute;
+        right: 10px;
+        height: 230px;
+        overflow-y: auto;
+        z-index: 1   
         
-.mapboxgl-popup h3 {
+    }
+    .legend h4 {
+        margin: 0 0 10px;
+    }
+    .legend div span {
+        border-radius: 5%;
+        display: inline-block;
+        height: 15px;
+        margin-right: 5px;
+        width: 30px;
+        border: .5px solid #727577;;
+    }        
+   
+    .legendmodal h4 {
+        margin: 0 0 10px;
+    }
+    .legendmodal div span {
+        border-radius: 5%;
+        display: inline-block;
+        height: 15px;
+        margin-right: 5px;
+        width: 30px;
+        border: .5px solid #727577;;
+    }    
+    .mapboxgl-popup {
+        max-width: 400px;
+        font: 12px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    }
+
+    .marker-title {
+        font-weight: 700;
+    }
+
+    .mapboxgl-popup {
+        max-width: 400px;
+        font: 18px/20px 'Roboto', sans-serif;
+    }
+
+    html .mapboxgl-popup-content {
+    	padding: 0 0 5px 0;
+    	-webkit-box-shadow: 0 0 10px 1px rgba(0,0,0,.2);
+    	box-shadow: 0 0 10px 1px rgba(0,0,0,.2);
+    }
+
+    .mapboxgl-popup h3 {
+        color: #000;
+        text-transform: uppercase;
+        font: 16px 'Raleway', sans-serif !important;     
+        padding: 5px 35px 5px 10px;
+        margin: 0;
+    	-webkit-border-radius: 3px 3px 0 0;
+    	border-radius: 3px 3px 0 0;
+    }
+
+    .mapboxgl-popup p {
+        margin: 0 10px 5px;
+    	line-height:14px;
+    }
+
+    .mapboxgl-popup p:nth-child(3) {
+        margin: 10px 10px 5px;
+    }
+
+    .mapboxgl-popup p a {
+        text-decoration:none;
+    	color:#ff2285;
+    	font-weight:700;
+    }
+
+    .mapboxgl-popup p a:hover {
+        text-decoration:underline;
+    }
+
+    #map .mapboxgl-popup .thumb {
+    	margin: 0 0 5px;
+    	width:300px;
+    }
+    .mapboxgl-popup .thumb img {
+        max-width:100%;
+    }
+
+    .mapboxgl-popup-close-button{
+        color: black;
+        font-size: 25px !important;
+    }
+        
+    .mapboxgl-popup h3 {
 		font-size:9px;
         font-family: 'Roboto', sans-serif;
 	}
@@ -280,6 +294,28 @@ html .mapboxgl-popup-content {
         .legend {
             display: none;
         }
+
+        .info {
+              position: absolute;
+              top: 200px;
+              left: 10px;      
+              background-color:rgba(255,255,255);
+              margin-left:0;
+              border-radius:4px 4px 4px;
+              box-shadow: 0px 0px 0px 2px rgba(0, 0, 0, 0.1);       
+              width:30px;
+              height:30px;
+              background-repeat: no-repeat;
+              background-position: center;
+              background-image: url('legend.svg') ; 
+              background-size: 20px 20px;  
+              z-index: 3;    
+              cursor: pointer;
+        }
+        .info:hover {
+             background-color:rgba(220,220,220, 1);          
+        }
+
     }     
     </style>
 </head>
@@ -319,12 +355,48 @@ html .mapboxgl-popup-content {
     <div><span style='background-color: #fff; border: 2px dashed saddlebrown;'></span>Colonial Terrace Arcetictual Design District</div> 
     <div><span style='background-color: #fff; border: 2px dashed black;'></span>East End Hitoric District</div>
     <b>QOZs</b>
-    <div><span style='background-color: purple'></span>Qualified Opportunity Zone</div>
-    
-</div>      
+    <div><span style='background-color: purple'></span>Qualified Opportunity Zone</div>    
+</div>   
+
+<!-- Modal Structure -->
+  <div id="modal1" class="modal">
+    <div class="modal-content">
+       <div id='zoning-modal' class='legendmodal'>
+    <center><img src="logo.png" height="130" width="153"></center>
+    <b>Zoning Districts</b>
+    <div><span style='background-color: #BDDA41'></span>Downtown Neighborhood</div>
+    <div><span style='background-color: #A22D6B'></span>Planned Waterfront District</div>
+    <div><span style='background-color: #FFAA00'></span>Broadway Corridor</div>
+    <div><span style='background-color: #FF0000'></span>Waterfront Gateway</div>
+    <div><span style='background-color: #FF7000'></span>Commercial District</div>
+    <div><span style='background-color: #D3FFBE'></span>Conservation Development District</div>
+    <div><span style='background-color: #E8BEFF'></span>Industrial</div>  
+    <div><span style='background-color: #73B2FF'></span>Institutional</div>
+    <div><span style='background-color: #A3FF73'></span>Open Space</div>
+    <div><span style='background-color: #38A800'></span>Park</div>
+    <div><span style='background-color: #FFFFEB'></span>Residential Single Family</div>
+    <div><span style='background-color: #FFFFBE'></span>Residential Low Density</div>
+    <div><span style='background-color: #FFE500'></span>Residential Medium Density</div>
+    <div><span style='background-color: #A87000'></span>Residential High Density</div>
+    <div><span style='background-color: #5B5B5B'></span>Utility</div>    
+    <b>Overlays</b>
+    <div><span style='background-color: #fff; border: 1.5px solid black;' ></span>Commerical District</div>
+    <div><span style='background-color: #fff; border: 2px dashed blue;'></span>Waterfront Protection Overlay</div>
+    <div><span style='background-color: #fff; border: 2px dashed red;'></span>Neighborhood Commercial</div>
+    <div><span style='background-color: #fff; border: 2px dashed saddlebrown;'></span>Colonial Terrace Arcetictual Design District</div> 
+    <div><span style='background-color: #fff; border: 2px dashed black;'></span>East End Hitoric District</div>
+    <b>QOZs</b>
+    <div><span style='background-color: purple'></span>Qualified Opportunity Zone</div>    
+</div>   
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-close waves-effect waves-green btn-flat">CLOSE</a>
+    </div>
+  </div>
    
 <nav id="menu"></nav>    
-<div id='search-btn' class='search'></div>     
+<div id='search-btn' class='search'></div>  
+<div id='info-btn' class='info'></div>   
 <div id='map'></div>  
     
 <script>
@@ -334,12 +406,18 @@ var map = new mapboxgl.Map({
     style: 'mapbox://styles/rcowling/cjtvpbz9a0h8u1fpnwsbk8bd3', // stylesheet location
     center: [-74.0104, 41.5034], // starting position [lng, lat]
     zoom: 13 // starting zoom
-});
-    
+});  
+  
 // Clicking on the search button returns map to center
 $('#search-btn').click(function(){
      map.jumpTo({zoom: 13, center: [-74.0104, 41.5034]}); 
-}); 
+});
+
+// Clicking the info button launches the legend modal window
+$('#info-btn').click(function(){
+    $('#modal1').modal(); 
+    $('#modal1').modal('open');
+});  
 // Add zoom and rotation controls to the map.
 map.addControl(new mapboxgl.NavigationControl(), 'top-left');
 
@@ -373,8 +451,7 @@ closeOnClick: false
 });      
     
 map.on('load', function () {
-    $('#modal1').modal(); 
-    $('#modal1').modal('open');  
+      
     //map.addSource('source_zoning', { type: 'geojson', data: url_zoning });
     
     map.addSource('zones-bbtzts', {
