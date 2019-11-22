@@ -271,6 +271,14 @@
     .UT {
 	background: #5B5B5B;        
     }
+
+    #modal1 {
+        visibility: hidden;
+    }
+
+    .modal-overlay {
+        visibility: hidden;
+    }
         
     .modal .modal-content {
         padding: 0px !important;
@@ -290,6 +298,14 @@
         nav .brand-logo {
             font-size: 20px !important;
         }
+
+        #modal1 {
+        visibility: visible;
+        }
+
+        .modal-overlay {
+        visibility: visible;
+        }
         
         .legend {
             display: none;
@@ -307,8 +323,8 @@
               height:30px;
               background-repeat: no-repeat;
               background-position: center;
-              background-image: url('legend.svg') ; 
-              background-size: 20px 20px;  
+              background-image: url('legend2.svg') ; 
+              background-size: 30px 30px;  
               z-index: 3;    
               cursor: pointer;
         }
@@ -361,7 +377,7 @@
 <!-- Modal Structure -->
   <div id="modal1" class="modal">
     <div class="modal-content">
-       <button class="modal-close btn-flat" style="position:absolute;top:0;right:0;font-size:30px;">X</button>
+      <!--  <button class="modal-close btn-flat" style="position:absolute;top:0;right:0;font-size:30px;">X</button> -->
        <div id='zoning-modal' class='legendmodal'>
     <center><img src="logo.png" height="130" width="153"></center>
     <b>Zoning Districts</b>
@@ -391,7 +407,7 @@
 </div>   
     </div>
     <div class="modal-footer">
-      <a href="#!" class="modal-close waves-effect waves-green btn-flat">CLOSE</a>
+      <a href="#!" class="modal-close waves-effect waves-green btn-flat">CLOSE</a><br>(click <img src="legend2.svg" alt="legend" style="width:30px;height:30px;"> to load this legend again)
     </div>
   </div>
    
@@ -452,7 +468,8 @@ closeOnClick: false
 });      
     
 map.on('load', function () {
-      
+    $('#modal1').modal(); 
+    $('#modal1').modal('open');  
     //map.addSource('source_zoning', { type: 'geojson', data: url_zoning });
     
     map.addSource('zones-bbtzts', {
